@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.auggie.student_server.mapper.CourseMapper">
+    <select id="findBySearch" resultType="Course">
+        SELECT * FROM studentms.c
+        <where>
+            1=1
+            <if test="cid != null">
+                AND cid = #{cid}
+            </if>
+            <if test="cname != null and cname != ''">
+                <if test="fuzzy == 0">
+                    AND cname = #{cname}
+                </if>
+                <if test="fuzzy == 1">
+                    AND cname LIKE CONCAT('%', #{cname}, '%')
+                </if>
+            </if>
+            <if test="ctype_name != null and ctype_name != ''">
+                <if test="fuzzy == 0">
+                    AND ctype_name = #{ctype_name}
+                </if>
+                <if test="fuzzy == 1">
+                    AND ctype_name LIKE CONCAT('%', #{ctype_name}, '%')
+                </if>
+            </if>
+            <if test="c_author != null and c_author != ''">
+                <if test="fuzzy == 0">
+                    AND c_author = #{c_author}
+                </if>
+                <if test="fuzzy == 1">
+                    AND c_author LIKE CONCAT('%', #{c_author}, '%')
+                </if>
+            </if>
+            <if test="cstatus != 5">
+                    AND c_status = #{cstatus}
+            </if>
+        </where>
+    </select>
+
+    <update id="updateById">
+        UPDATE studentms.c SET
+                               cname = #{course.cname},
+                               ctype_name = #{course.ctype_name},
+                               c_startdate = #{course.c_startdate},
+                               c_enddate = #{course.c_enddate},
+                               c_link = #{course.c_link},
+                               update_time = #{course.update_time},
+                               c_description = #{course.c_description},
+                               c_status = case
+                                   WHEN c_status IN (0, 4) THEN 0
+                                   WHEN c_status IN (1, 2, 3) THEN 1
+                                   ELSE c_status
+                                END
+        WHERE cid = #{course.cid};
+    </update>
+
+
+    <insert id="insertCourse">
+        INSERT INTO studentms.c (cname,create_time,ctype_name,c_author,c_startdate,c_enddate,c_link,c_status,c_description)
+        VALUES
+               (#{course.cname},
+                #{course.create_time},
+                #{course.ctype_name},
+                #{course.c_author},
+                #{course.c_startdate},
+                #{course.c_enddate},
+                #{course.c_link},
+                #{course.c_status},
+                #{course.c_description})
+    </insert>
+
+    <delete id="deleteById">
+        DELETE FROM studentms.c WHERE cid = #{cid}
+    </delete>
+
+
+    <update id="review">
+        update c set c_status = 1,c_reviewer = #{c_reviewer}
+        <where>
+        <if test="cid != null">
+            cid = #{cid};
+        </if>
+        </where>
+    </update>
+
+    <update id="overrule">
+        update c set c_status = 4,c_reviewer = #{c_reviewer}
+        <where>
+            <if test="cid != null">
+                cid = #{cid};
+            </if>
+        </where>
+    </update>
+    <update id="openCourse">
+        update c set c_status = 2
+        <where>
+            <if test="cid != null">
+                cid = #{cid};
+            </if>
+        </where>
+    </update>
+    <update id="terminateCourse">
+        update c set c_status = 3
+        <where>
+            <if test="cid != null">
+                cid = #{cid};
+            </if>
+        </where>
+    </update>
+</mapper>

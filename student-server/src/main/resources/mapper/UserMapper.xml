@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.auggie.student_server.mapper.UserMapper">
+
+
+    <insert id="userRegister">
+        insert into s(sname,password,ssex,sphone,semail,sbirthday,create_time)
+        values(#{nickName},#{passWord},#{sex},#{phone},#{email},#{birthday},#{createTime})
+    </insert>
+
+
+    <select id="phoneExist" resultType="com.auggie.student_server.entity.User">
+        select * from s
+        <where>
+            <if test="phone != null and phone != ''">
+                sphone = #{phone}
+            </if>
+        </where>
+    </select>
+</mapper>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.auggie.student_server.mapper.TeacherMapper">
+    <select id="findAll" resultType="Teacher">
+        SELECT * FROM studentms.t;
+    </select>
+
+    <select id="findBySearch" resultType="Teacher">
+        SELECT * FROM studentms.t
+        <where>
+            <if test="tid != null">
+                tid = #{tid}
+            </if>
+            <if test="tname != null">
+                <if test="fuzzy == 0">
+                    AND tname = #{tname}
+                </if>
+                <if test="fuzzy == 1">
+                    AND tname LIKE CONCAT('%', #{tname}, '%')
+                </if>
+            </if>
+        </where>
+    </select>
+
+    <select id="findById" resultType="Teacher">
+        SELECT * FROM studentms.t WHERE tid = #{tid};
+    </select>
+
+
+    <update id="updateById">
+        UPDATE studentms.t SET
+                               tname = #{teacher.tname},
+                               password = #{teacher.password},
+                               update_time = #{teacher.update_time},
+                               tsex = #{teacher.tsex},
+                               tphone = #{teacher.tphone},
+                               temail = #{teacher.temail},
+                               tbirthday = #{teacher.tbirthday}
+        WHERE tid = #{teacher.tid};
+    </update>
+
+    <insert id="save">
+        INSERT INTO studentms.t (tname, password) VALUES (#{teacher.tname}, #{teacher.password})
+    </insert>
+
+    <delete id="deleteById">
+        DELETE FROM studentms.t WHERE tid = #{tid}
+    </delete>
+
+    <insert id="tRegister">
+        insert into t(tname,password,treal_name,tid_number,tsex,tphone,temail,tbirthday,create_time)
+        value(#{nickName},#{passWord},#{realName},#{idNumber},#{sex},#{phone},#{email},#{birthday},#{createTime})
+    </insert>
+
+    <select id="idExist" resultType="Teacher">
+        select * from t
+        <where>
+            <if test="idNumber != null and idNumber != ''">
+                tid_number = #{idNumber}
+            </if>
+        </where>
+    </select>
+    <select id="phoneExist" resultType="com.auggie.student_server.entity.Teacher">
+        select * from t
+        <where>
+            <if test="phone != null and phone != ''">
+                tphone = #{phone}
+            </if>
+        </where>
+    </select>
+    <select id="findByPhone" resultType="com.auggie.student_server.entity.Teacher">
+        SELECT * FROM studentms.t WHERE tphone = #{phone};
+    </select>
+</mapper>

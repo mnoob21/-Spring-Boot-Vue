@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: com.aliyun:aliyun-gateway-pop:0.2.15-beta">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../../maven/repository/com/aliyun/aliyun-gateway-pop/0.2.15-beta/aliyun-gateway-pop-0.2.15-beta.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$PROJECT_DIR$/../../maven/repository/com/aliyun/aliyun-gateway-pop/0.2.15-beta/aliyun-gateway-pop-0.2.15-beta-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/../../maven/repository/com/aliyun/aliyun-gateway-pop/0.2.15-beta/aliyun-gateway-pop-0.2.15-beta-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

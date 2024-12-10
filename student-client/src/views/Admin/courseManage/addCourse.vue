@@ -1,0 +1,186 @@
+<template>
+  <div>
+    <el-form style="width: 50%" :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+      <el-form-item label="课程名" prop="cname">
+        <el-input
+            v-model="ruleForm.cname"
+        ></el-input>
+      </el-form-item>
+
+      <el-form-item label="课程类别" prop="ctype_name" style="width: 40%">
+        <el-select v-model="ruleForm.ctype_name">
+          <el-option
+
+              v-for="type in courseTypes"
+              :key="type"
+              :label="type"
+              :value="type">
+          </el-option>
+        </el-select>
+      </el-form-item>
+
+      <el-form-item label="课程日期" prop="courseDate">
+        <el-date-picker
+            v-model="courseDate"
+            type="date"
+            placeholder="选择日期">
+        </el-date-picker>
+      </el-form-item>
+
+      <el-form-item label="课程开展时间" prop="courseDate">
+        <div style="display: flex; align-items: center;">
+          <el-time-select
+              placeholder="起始时间"
+              v-model="startTime"
+              :picker-options="{
+        start: '08:00',
+        step: '00:30',
+        end: '22:00'
+      }"
+              style="flex-grow: 0;margin-right: 10px">
+          </el-time-select>
+
+          <span>——</span>
+
+          <el-time-select
+              placeholder="结束时间"
+              v-model="endTime"
+              :picker-options="{
+        start: '08:00',
+        step: '00:30',
+        end: '22:00',
+        minTime: startTime
+      }"
+              style="flex-grow: 0; margin-left: 10px;">
+          </el-time-select>
+        </div>
+      </el-form-item>
+
+      <el-form-item label="课程链接" prop="c_link">
+        <el-input
+            style="width: 60%"
+            v-model.number="ruleForm.c_link"
+
+        ></el-input>
+      </el-form-item>
+
+      <el-form-item label="课程简介" prop="c_description">
+        <el-input
+            type="textarea"
+            v-model="ruleForm.c_description"
+            :maxlength="200"
+            show-word-limit
+            rows="4"
+            placeholder="请输入课程简介（最多200字）">
+        </el-input>
+      </el-form-item>
+
+
+      <el-form-item label="创建人" prop="c_author">
+        <el-input
+            style="width: 15%"
+            v-model.number="ruleForm.c_author"
+            :disabled="true"
+        ></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
+        <el-button @click="resetForm('ruleForm')">重置</el-button>
+        <el-button @click="test">test</el-button>
+      </el-form-item>
+    </el-form>
+  </div>
+</template>
+<script>
+import moment from "moment";
+
+export default {
+  data() {
+    return {
+      startTime: '',
+      endTime: '',
+      courseDate:'',
+      courseTypes: [], // 存储课程类型的数组
+      selectedType: '', // 用于 v-model 绑定的选中值
+      ruleForm: {
+        cname: null,
+        c_author: sessionStorage.getItem('name'),
+        c_link:'',
+        c_startdate:this.courseDate + this.startTime,
+        c_enddate:this.courseDate + this.endTime,
+        c_status:'',
+        c_description:'',
+      },
+      rules: {
+        cname: [
+          { required: true, message: '请输入名称', trigger: 'blur' },
+        ],
+
+      }
+    };
+  },
+  methods: {
+
+    updateDates() {
+      this.ruleForm.c_startdate = moment(this.courseDate).format('YYYY-MM-DD') + ' ' + this.startTime;
+      this.ruleForm.c_enddate = moment(this.courseDate).format('YYYY-MM-DD') + ' ' + this.endTime;
+    },
+
+    submitForm(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+
+          // 通过前端校验
+          const that = this
+          // console.log(this.ruleForm)
+
+          axios.post("http://localhost:10086/course/save", this.ruleForm).then(function (resp) {
+            console.log(resp)
+            if (resp.data === true) {
+              that.$message({
+                showClose: true,
+                message: '插入成功',
+                type: 'success'
+              });
+            }
+            else {
+              that.$message.error('插入失败，请检查数据库t');
+            }
+            that.$router.push("/queryCourse")
+          })
+        } else {
+          return false;
+        }
+      });
+    },
+    resetForm(formName) {
+      this.$refs[formName].resetFields();
+    },
+    test() {
+      console.log(this.ruleForm)
+    },
+
+  },
+  created() {
+    axios.post('http://localhost:10086/courseType/getAllCourseType',this.ruleForm)
+        .then(resp => {
+          this.courseTypes = resp.data;
+          console.log(resp.data);
+        })
+        .catch(error => {
+          console.error("请求失败:", error);
+        });
+  },
+  watch:{
+    startTime(newVal) {
+      this.updateDates();
+    },
+    endTime(newVal) {
+      this.updateDates();
+    },
+    courseDate(newVal) {
+      this.updateDates();
+    },
+  },
+}
+</script>

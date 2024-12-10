@@ -1,0 +1,31 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/studentms?setUnicode=true&characterEncoding=utf8&useAffectedRows=true
+    username: root
+    password: 123456
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    lettuce:
+      pool:
+        max-active: 8 # 最大连接
+        max-idle: 8 # 最大空闲连接
+        min-idle: 0 # 最小空闲连接
+        max-wait: 100ms # 最大等待时长
+
+
+mybatis:
+  configuration:
+    jdbc-type-for-null: 'NULL'
+  type-aliases-package: com.auggie.student_server.entity
+  mapper-locations: classpath:mapper/*.xml
+
+server:
+  port: 10086
+
+sendCode:
+  host : "http://edisim.market.alicloudapi.com"
+  path : "/comms/sms/groupmessaging"
+  appcode : "95b92fbca3fd48e0be618bbabf96e7c9"
+  method : "POST"

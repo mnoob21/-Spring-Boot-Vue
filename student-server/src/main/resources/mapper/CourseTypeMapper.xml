@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.auggie.student_server.mapper.CourseTypeMapper">
+
+
+    <insert id="addCourseType">
+        insert into
+            ctype(ctype_name,ctype_author,create_time)
+        values(#{ctype_name},#{ctype_author},#{create_time})
+
+    </insert>
+
+
+    <select id="findByName" resultType="com.auggie.student_server.entity.CourseType">
+        select * from ctype
+<where>
+    <if test="ctype_name != null and ctype_name != ''">
+        ctype_name = #{ctype_name}
+    </if>
+</where>
+    </select>
+    <select id="findAll" resultType="com.auggie.student_server.entity.CourseType">
+        select * from ctype
+    </select>
+    <select id="findBySearch" resultType="com.auggie.student_server.entity.CourseType">
+        SELECT * FROM studentms.ctype
+        <where>
+            1=1
+            <if test="ctype_id != null">
+                and ctype_id = #{ctype_id}
+            </if>
+            <if test="ctype_name != null">
+                <if test="fuzzy == 0">
+                    AND ctype_name = #{ctype_name}
+                </if>
+                <if test="fuzzy == 1">
+                    AND ctype_name LIKE CONCAT('%', #{ctype_name}, '%')
+                </if>
+            </if>
+        </where>
+    </select>
+
+
+    <delete id="deleteById">
+        delete from ctype
+        <where>
+            <if test="ctype_id != null">
+                ctype_id = #{ctype_id}
+            </if>
+        </where>
+    </delete>
+
+    <select id="findById" resultType="com.auggie.student_server.entity.CourseType">
+        select * from ctype
+        <where>
+            <if test="ctype_id != null">
+                ctype_id = #{ctype_id}
+            </if>
+        </where>
+    </select>
+
+    <update id="updateCourseType">
+        update ctype  set ctype_name = #{ctype_name},update_time = #{update_time}
+        <where>
+            <if test="ctype_id != null">
+                ctype_id = #{ctype_id}
+            </if>
+        </where>
+    </update>
+</mapper>
