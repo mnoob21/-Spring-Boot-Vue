@@ -13,3 +13,10 @@
 
 如需添加阿里云短信服务，自行创建SMS工具类配置（网上有教程）
 
+
+启动项目流程：配置数据库信息
+启动项目前端：控制台cd student-client
+                    npm run dev
+启动项目后端：直接run
+sql文件在resource文件夹下
+
