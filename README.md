@@ -4,5 +4,12 @@
 
 对github上的项目进行修改。
 
-原来项目链接：
+原来项目链接：https://github.com/mouday/student-course-selection-system
+在此感谢作者源码支持
+
+具体技术栈也请参考原项目链接
+
+登录注册默认验证码为：123123
+
+如需添加阿里云短信服务，自行创建SMS工具类配置（网上有教程）
 
