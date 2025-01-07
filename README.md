@@ -15,8 +15,9 @@
 
 
 启动项目流程：配置数据库信息
-启动项目前端：控制台cd student-client
-                    npm run dev
+启动项目前端：
+控制台cd student-client
+npm run dev
 启动项目后端：直接run
 sql文件在resource文件夹下
 
